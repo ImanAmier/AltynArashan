@@ -12,8 +12,12 @@ WORK = '/home/user/work'
 SRC = engine.SRC
 
 # ---------------------------------------------------------------- timeline
-beats = ext_beats()
-music = extended()
+if os.environ.get('NO_EXTEND'):
+    from music import load_song
+    music = load_song(); beats = json.load(open(f'{WORK}/beats.json'))['beats']
+else:
+    beats = ext_beats()
+    music = extended()
 MUSIC_LEN = len(music) / SR
 grid = [0.0] + beats[1:]          # treat t=0 as beat 0 so the teaser starts immediately
 
@@ -237,8 +241,8 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             ev.append(f"Dialogue: 2,{ts(a)},{ts(b)},Moment,,0,0,0,,{{\\fad(500,400)\\blur0.4}}{text}")
         elif style == 'end':
             a = s['t0'] + 1.6; b = TOTAL - 0.4
-            ev.append(f"Dialogue: 2,{ts(a)},{ts(b)},Main,,0,0,0,,{{\\fad(1400,1600)\\move(960,800,960,775,0,2500)\\blur0.6}}{text}")
-            ev.append(f"Dialogue: 2,{ts(a+0.8)},{ts(b)},Sub,,0,0,0,,{{\\fad(1400,1600)\\pos(960,880)}}KYRGYZSTAN")
+            ev.append(f"Dialogue: 2,{ts(a)},{ts(b)},Main,,0,0,0,,{{\\fad(1400,1600)\\move(960,480,960,455,0,2500)\\blur0.6}}{text}")
+            ev.append(f"Dialogue: 2,{ts(a+0.8)},{ts(b)},Sub,,0,0,0,,{{\\fad(1400,1600)\\pos(960,560)}}KYRGYZSTAN")
     glow = []
     for e in ev:
         if e.startswith('Dialogue: 2,'):
